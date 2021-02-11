@@ -1,0 +1,84 @@
+/**
+*Code adapted from Sample project in SWEN20003
+*Originally written by Eleanor McMurtry,
+*Edited and updated by Wang Yuchen 813430
+*The University of Melbourne
+*/
+import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.BasicGame;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Input;
+
+/**
+ * Main class for the game.
+ * Handles initialisation, input and rendering.
+ * @author Wang Yuchen (Adapted from Sample project 1 by Eleanor McMurtry)
+ */
+public class App extends BasicGame {
+    /** screen width, in pixels */
+    public static final int SCREEN_WIDTH = 1024;
+    /** screen height, in pixels */
+    public static final int SCREEN_HEIGHT = 768;
+    
+    //properties of the application
+    private int level = 1;	
+    private World world;
+    
+    /**
+     * Instantiates a new app.
+     */
+    public App() {
+        super("Shadow Leap");
+    }
+
+    @Override
+    public void init(GameContainer gc)
+            throws SlickException {
+    	if(level >= 2) {
+    		System.exit(0);
+    	}else {
+        world = new World(level);}
+    }
+
+    /** Update the game state for a frame.
+     * @param gc The Slick game container object.
+     * @param delta Time passed since last frame (milliseconds).
+     */
+    @Override
+    public void update(GameContainer gc, int delta)
+            throws SlickException {
+        // Get data about the current input (keyboard state).
+        Input input = gc.getInput();
+        world.update(input, delta);
+        
+        if(world.getLevelProgress() == 5) {
+        	level++;
+        	this.init(gc);
+        }
+    }
+
+    /** Render the entire screen, so it reflects the current game state.
+     * @param gc The Slick game container object.
+     * @param g The Slick graphics object, used for drawing.
+     */
+    public void render(GameContainer gc, Graphics g)
+            throws SlickException {
+        world.render(g);
+    }
+
+    /** Start-up method. Creates the game and runs it.
+     * @param args Command-line arguments (ignored).
+     */
+    public static void main(String[] args)
+            throws SlickException {
+        AppGameContainer app = new AppGameContainer(new App());
+        app.setShowFPS(false);
+        app.setDisplayMode(SCREEN_WIDTH, SCREEN_HEIGHT, false);
+        app.start();
+    }
+    
+
+
+}
